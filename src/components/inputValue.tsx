@@ -1,25 +1,27 @@
 import React, { Component } from 'react'
-import {Space,Input,Button} from 'antd'
-import { connect } from 'react-redux'
+import { Space, Input, Button } from 'antd'
+import { Dispatch } from 'redux'
+import { connect, } from 'react-redux'
+import { IInitState } from '../store/reducers/reducer'
+import {add} from '../store/action'
 
-
-
-interface IProps{
-    a?:any
+interface IProps {
+    // data: string[]
+    onAdd:(value:string) => void
 }
 
-interface IState{
-    value:string
+interface IState {
+    value: string
 }
-// @connect()
-class InputValue extends Component<IProps,IState>{
-    constructor(props:IProps){
+class InputValue extends Component<IProps, IState>{
+    constructor(props: IProps) {
         super(props)
+        console.log(props)
         this.state = {
-            value:""
+            value: ""
         }
     }
-    public render(){
+    public render() {
         return (
             <Space>
                 <Input onChange={this.changeValue} value={this.state.value} />
@@ -28,15 +30,30 @@ class InputValue extends Component<IProps,IState>{
         )
     }
 
-    private changeValue = (event:React.ChangeEvent<HTMLInputElement>) => {
+    private changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            value:event.target.value
+            value: event.target.value
         })
     }
 
     private addData = () => {
-        console.log(this.state.value)
+        this.props.onAdd(this.state.value)
+        this.setState({
+            value: ""
+        })
     }
 }
 
-export default InputValue
+
+// 将 reducer 中的状态插入到组件的 props 中
+// const mapStateToProps = (state: IInitState): { data: string[] } => ({
+//     data:state.data
+// })
+
+// 将 对应action 插入到组件的 props 中
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    onAdd: (value:string) => dispatch(add(value)),
+
+})
+
+export default connect(null, mapDispatchToProps)(InputValue)
