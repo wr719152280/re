@@ -1,12 +1,21 @@
 import { ADDAction, REMOVEAction } from "../action";
 import { ADD, REMOVE } from "../const";
+import { DefaultRootState } from "react-redux";
 
-export interface IInitState{
+
+export interface IInitState extends DefaultRootState{
     data:string[]
     count:number
 }
 
-export default (state:IInitState = {data:['sasasa','dasdasd'],count:0},action:ADDAction|REMOVEAction) => {
+const instState:IInitState = {
+    data:[
+        'sasa'
+    ],
+    count:0,
+}
+
+export default (state:IInitState = instState,action:ADDAction|REMOVEAction) => {
     const {data} = JSON.parse(JSON.stringify(state)) as IInitState
     switch (action.type) {
         case ADD:
