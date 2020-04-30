@@ -6,7 +6,6 @@ import usersApi from '../apis/users'
 const Home = (props: RouteChildrenProps) => {
     const [users, setUsers] = useState<any[]>([])
     useEffect(() => {
-        usersApi.posts()
         usersApi.getUses().then(res => {
             if (res.data) {
                 setUsers(res.data)

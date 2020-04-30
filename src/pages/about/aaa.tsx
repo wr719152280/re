@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Error = () => {
+const Aaa  = () => {
     return (
         <div>
-            
+            aaa
         </div>
     )
 }
 
-export default Error
+export default Aaa

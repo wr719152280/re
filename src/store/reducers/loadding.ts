@@ -8,7 +8,7 @@ export interface IInitState extends DefaultRootState{
 }
 
 const initState = {
-    loading:true
+    loading:false
 }
 
 

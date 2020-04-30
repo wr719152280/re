@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, RouteChildrenProps } from "react-router-dom";
 import Home from '../pages/home';
 import Header from '../layouts/header';
 import { Layout, ConfigProvider } from 'antd';
@@ -12,19 +12,38 @@ import { useSelector } from 'react-redux';
 import { IReducer } from '../store/reducers';
 import { LANG } from '../store/reducers/lang';
 import Loading from '../components/loading';
+import routerTypes from '../types/routerTypes';
+import Xxx from '../pages/about/xxx';
+import Aaa from '../pages/about/aaa';
 
-const routerList = [
+const routerList:routerTypes.IRouter[] = [
     {
         path:'/',
         exact:true,
         component:Home,
-        title:'首页'
+        title:'首页',
+        showNav:true,
+        
     },
     {
         path:'/about',
-        exact:true,
         component:About,
-        title:'关于我们'
+        title:'关于我们',
+        showNav:true,
+        children:[
+            {
+                path:'/about/xxx',
+                component:Xxx,
+                title:'关于我们xxx',
+                showNav:true,
+            },
+            {
+                path:'/about/aaa',
+                component:Aaa,
+                title:'关于我们aaa',
+                showNav:true,
+            }
+        ]
     },
     {
         path:'/login',
@@ -59,7 +78,7 @@ const Root = () => {
         <ConfigProvider locale={langs[lang] || zhCN}>
             <BrowserRouter>
                 <Layout>
-                    <Header></Header>
+                    <Header routerList={routerList}></Header>
                     <Loading></Loading>
                     <Layout.Content>
                     <Switch>
@@ -70,18 +89,15 @@ const Root = () => {
                                         path={route.path} 
                                         exact={route.exact} 
                                         key={route.path}
-                                        render={(props)=>{
+                                        render={(props:routerTypes.IRouterProps)=>{
+                                            props.childrenRouters = route.children
                                             document.title = route.title
-                                            return <route.component {...props}></route.component>
+                                            return <route.component {...props as any}></route.component>
                                         }}
                                     />
                                 )
                             })
                         }
-                        
-                        {/* <Route path="/about" exact component={About}></Route>
-                        <Route path="/login" exact component={Login}></Route>
-                        <Route path="*" component={Error}></Route> */}
                     </Switch>
                     </Layout.Content>
                 </Layout>
