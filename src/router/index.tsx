@@ -1,5 +1,5 @@
-import React from 'react'
-import { BrowserRouter, Route, Switch, RouteChildrenProps } from "react-router-dom";
+import React, { useEffect } from 'react'
+import { BrowserRouter, Route, Switch} from "react-router-dom";
 import Home from '../pages/home';
 import Header from '../layouts/header';
 import { Layout, ConfigProvider } from 'antd';
@@ -66,14 +66,23 @@ const langs = {
 
 interface IProps{
     lang:LANG
+    config:any
 }
 
 const Root = () => {
-    const {lang} = useSelector<IReducer,IProps>(({lang}):IProps=>{
+    const {lang,config} = useSelector<IReducer,IProps>(({lang,config}):IProps=>{
         return {
-            lang:lang.lang
+            lang:lang.lang,
+            config
         }
     })
+    
+    useEffect(()=>{
+        if(!window.location.href.includes('login') && !config.currentUser){
+            window.location.href = '/login'
+        }
+    },[config])
+    
     return (
         <ConfigProvider locale={langs[lang] || zhCN}>
             <BrowserRouter>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import routerTypes from '../types/routerTypes'
 import { Layout, Menu } from 'antd'
 import { Link, Route } from 'react-router-dom'

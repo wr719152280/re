@@ -6,16 +6,19 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Root from './router';
 import "./styles/main.less";
+import config from './config'
 
-
-ReactDOM.render(
-  <React.StrictMode>
+config.initConfig().then(()=>{
+  ReactDOM.render(
     <Provider store={store}>
-        <Root></Root>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+      <Root></Root>
+    </Provider>,
+    document.getElementById('root')
+  );
+})
+
+
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { RouteChildrenProps } from 'react-router-dom'
 import { Card, Row, Col } from 'antd'
-import usersApi from '../apis/users'
 
 const Home = (props: RouteChildrenProps) => {
-    const [users, setUsers] = useState<any[]>([])
-    useEffect(() => {
-        usersApi.getUses().then(res => {
-            if (res.data) {
-                setUsers(res.data)
-            }
-        })
-    }, [])
+    const [users] = useState<any[]>([])
+    
     return (
         <Row gutter={[16, 16]} style={{ margin: 0 }}>
             {

@@ -1,62 +1,79 @@
 import React, { useState } from 'react'
-import { Form, Input, Button } from 'antd'
-import { ValidateErrorEntity,Store } from 'rc-field-form/lib/interface'
-import { RouteChildrenProps } from 'react-router-dom';
+import { Button, message } from 'antd'
+import { RouteChildrenProps, Link } from 'react-router-dom';
 import usersApi from '../apis/users';
+import {hash} from 'spark-md5'
+import { useDispatch } from 'react-redux';
+import { changeConfig } from '../store/action';
 
 interface ILoginData{
     name:string
     password:string
 }
 
-const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 18 },
-};
 
-const tailLayout = {
-    wrapperCol: { offset: 6, span: 18 },
-};
 const Login = (props:RouteChildrenProps) => {
+    const [userNameFocus,setUserNameFocus] = useState<boolean>(false)
+    const [passwordFocus,setPasswordFocus] = useState<boolean>(false)
+    const [userName,setUserName] = useState<string>('')
+    const [password,setPassword] = useState<string>('')
     const [loading,setLoading] = useState<boolean>(false)
-    const onFinish = (values:Store) => {
+    const dispatch = useDispatch()
+    const login = (event:React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        if(!userName){
+            message.error('请输入用户名')
+            return
+        }
+        if(!password){
+            message.error('请输入密码')
+            return
+        }
         setLoading(true)
-            usersApi.posts().then(res=>{
+        usersApi.login(userName,hash(password)).then((res)=>{
+            setLoading(false)
+            if(res.data.data && res.data.success){
+                dispatch(changeConfig(res.data.data))
                 props.history.push('/')
-            }).catch(err=>{
-                setLoading(false)
-            })
-    }
-    const onFinishFailed = (errorInfo: ValidateErrorEntity) => {
-        console.log(errorInfo)
+            }else{
+                message.error(res.data.error.title)
+            }
+        }).catch((err)=>{
+            console.log(err)
+            setLoading(false)
+        })
     }
     return (
         <div className="login-page">
-            <div className="login-main">
-                <Form
-                    {...layout}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                >
-                    <Form.Item
-                        label="用户名"
-                        name="username"
-                        rules={[{ required: true, message: '请输入用户名' }]}
-                    >
-                        <Input disabled={loading} />
-                    </Form.Item>
-                    <Form.Item
-                        label="密码"
-                        name="password"
-                        rules={[{ required: true, message: '请输入密码' }]}
-                    >
-                        <Input.Password  disabled={loading} />
-                    </Form.Item>
-                    <Form.Item {...tailLayout}>
-                        <Button loading={loading} type="primary" htmlType="submit">登录</Button>
-                    </Form.Item>
-                </Form>
-            </div>
+            <form className="login-main" onSubmit={login} name='loginForm'>
+                <h1>Login</h1>
+                <div className="txtb">
+                    <input 
+                        type="text" 
+                        onFocus={() => setUserNameFocus(true)} 
+                        onBlur={() => setUserNameFocus(userName.length > 0)} 
+                        className={userNameFocus ? 'focus' : ''}
+                        value={userName}
+                        onChange={(event)=>setUserName(event.target.value)}
+                    />
+                    <span data-placeholder="UserName"></span>
+                </div>
+                <div className="txtb">
+                    <input 
+                        type="password" 
+                        onFocus={() => setPasswordFocus(true)} 
+                        onBlur={() =>  setPasswordFocus(password.length > 0)} 
+                        className={passwordFocus ? 'focus' : ''}
+                        value={password}
+                        onChange={(event)=>setPassword(event.target.value)}
+                    />
+                    <span data-placeholder="PassWord"></span>
+                </div>
+                <Button htmlType="submit" className="login-btn" loading={loading}>Login</Button>
+                <div className="bottom-text">
+                    Don't have account? <Link to="/">Sing up</Link>
+                </div>
+            </form>
         </div>
     )
 }

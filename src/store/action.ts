@@ -1,4 +1,4 @@
-import { ADD,ADD_TYPE,REMOVE,REMOVE_TYPE, CHANGE_ROUTE_TYPE, CHANGE_ROUTE, CHANGE_LANG, CHANGE_LANG_TYPE, CHANGE_LOADING, CHANGE_LOADING_TYPE } from "./const";
+import { ADD,ADD_TYPE,REMOVE,REMOVE_TYPE, CHANGE_ROUTE_TYPE, CHANGE_ROUTE, CHANGE_LANG, CHANGE_LANG_TYPE, CHANGE_LOADING, CHANGE_LOADING_TYPE, CHANGE_CONFIG, CHANGE_CONFIG_TYPE } from "./const";
 import { LANG } from "./reducers/lang";
 
 export interface ADDAction{
@@ -24,6 +24,11 @@ export interface CHANGELANGAction{
 export interface CHANGELOADINGAction{
     type:CHANGE_LOADING_TYPE,
     loading:boolean
+}
+
+export interface CHANGECONFIGAction{
+    type:CHANGE_CONFIG_TYPE,
+    config:any
 }
 
 
@@ -59,5 +64,12 @@ export const changeLoading = (loading:boolean):CHANGELOADINGAction => {
     return {
         type:CHANGE_LOADING,
         loading
+    }
+}
+
+export const changeConfig = (config:any):CHANGECONFIGAction => {
+    return {
+        type:CHANGE_CONFIG,
+        config
     }
 }

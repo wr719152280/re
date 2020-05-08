@@ -5,6 +5,8 @@ import { message } from 'antd'
 
 const http = axios.create()
 
+// axios.defaults.baseURL = '/api';
+
 let requestLoadingCount:number = 0
 
 const addLoading = () => {
@@ -23,6 +25,8 @@ const removeLoading = () => {
 
 http.interceptors.request.use((config)=>{
     addLoading()
+    config.url = '/proxy' + config.url;
+    config.headers['mam-product'] = 'mch'
     return config
 })
 

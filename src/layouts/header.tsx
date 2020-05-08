@@ -1,28 +1,20 @@
 import React from 'react'
-import {Layout, Menu, Select} from 'antd'
+import {Layout, Menu, Dropdown} from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import {LANG} from '../store/reducers/lang'
-import { useSelector, useDispatch } from 'react-redux'
-import {changeLang} from '../store/action'
-import { IReducer } from '../store/reducers'
 import routerTypes from '../types/routerTypes'
-
-interface IProps{
-    lang:LANG
-}
+import { useSelector } from 'react-redux'
+import { IReducer } from '../store/reducers'
+import usersApi from '../apis/users'
 
 interface IHeaderProps{
     routerList:routerTypes.IRouter[]
 }
 
 const Header = (props:IHeaderProps) => {
-    const history = useHistory()
-    const {lang} = useSelector<IReducer,IProps>(({lang}):IProps=>{
-        return {
-            lang:lang.lang
-        }
+    const {currentUser} = useSelector<IReducer,any>(({config})=>{
+        return config
     })
-    const disPatch = useDispatch()
+    const history = useHistory()
     let keys =  props.routerList.filter(item=>{
         return history.location.pathname.includes(item.path)
     }).map(item=>{
@@ -30,18 +22,30 @@ const Header = (props:IHeaderProps) => {
             path:item.path
         }
     })
+    const exit = () => {
+        usersApi.exit()
+        history.push('/login')
+    }
     if(history.location.pathname.indexOf('login') !== -1){
         return null
     }else{
+        const menu = (
+            <Menu>
+                <Menu.Item onClick={exit}>退出</Menu.Item>
+            </Menu>
+            )
         return (
             <Layout.Header>
-                <div style={{float:'right'}}>
-                    <Select value={lang} onChange={(value)=>disPatch(changeLang(value))}>
-                        
-                        <Select.Option value={LANG.CH}>中文</Select.Option>
-                        <Select.Option value={LANG.EN}>英文</Select.Option>
-                    </Select>
-                </div>
+                {
+                    currentUser && <div style={{float:'right'}}>
+                    <Dropdown overlay={
+                        menu
+                    }>
+                        <div style={{color:'#fff',cursor:'pointer'}}>{currentUser.nickName}</div>
+                    </Dropdown>
+                    </div>
+                }
+                
                 <Menu style={{width:'80%'}} theme="dark" mode="horizontal" selectedKeys={[keys[keys.length - 1].path]}>
                         {
                             props.routerList.filter(item=>item.showNav).map(item=>{
@@ -51,7 +55,6 @@ const Header = (props:IHeaderProps) => {
                             })
                         }
                 </Menu>
-                
             </Layout.Header>
         )
     }

@@ -7,7 +7,17 @@ const usersApi = {
     },
     posts:() => {
         return http.get('http://jsonplaceholder.typicode.com/posts')
+    },
+    login:(loginName:string,password:string)=>{
+        return http.post('/user/login',{
+            loginName,
+            password
+        })
+    },
+    exit:()=>{
+        return http.get('/user/exit')
     }
+
 }
 
 export default usersApi

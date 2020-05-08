@@ -17,3 +17,7 @@ export type CHANGE_LANG_TYPE = typeof CHANGE_LANG
 export const CHANGE_LOADING = 'CHANGE_LOADING'
 
 export type CHANGE_LOADING_TYPE = typeof CHANGE_LOADING
+
+export const CHANGE_CONFIG = 'CHANG_CONFIG'
+
+export type CHANGE_CONFIG_TYPE = typeof CHANGE_CONFIG
