@@ -8,6 +8,7 @@ namespace routerTypes{
         title:string
         showNav?:boolean
         children?:IRouter[]
+        icon?:React.ReactNode
     }
 
     export interface IRouterProps extends RouteChildrenProps{
