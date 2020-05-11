@@ -15,7 +15,7 @@ import routerTypes from '../types/routerTypes';
 import Light from '../pages/light';
 import SideBar from '../layouts/sideBar';
 import {PieChartOutlined,DesktopOutlined,NotificationOutlined} from '@ant-design/icons'
-import Three from '../pages/three';
+import Context from '../pages/context/context';
 
 const routerList:routerTypes.IRouter[] = [
     {
@@ -35,10 +35,10 @@ const routerList:routerTypes.IRouter[] = [
         icon:<DesktopOutlined />
     },
     {
-        path:'/three',
+        path:'/context',
         exact:true,
-        component:Three,
-        title:'牛逼效果',
+        component:Context,
+        title:'上下文',
         showNav:true,
         icon:<NotificationOutlined />
     },

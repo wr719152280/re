@@ -17,23 +17,27 @@ const SideBar = (props: IHeaderProps) => {
             path: item.path
         }
     })
-    return (
-        <Layout.Sider collapsible collapsed={collapsed} onCollapse={(collapsed) => setCollapsed(collapsed)}>
-            <Menu
-                mode="inline"
-                selectedKeys={[keys[keys.length - 1].path]}
-                style={{ height: '100%' }}
-            >
-                {
-                    props.routerList.filter(item => item.showNav).map(item => {
-                        return (
-                            <Menu.Item key={item.path} icon={item.icon} onClick={() => history.push(item.path)}>{item.title}</Menu.Item>
-                        )
-                    })
-                }
-            </Menu>
-        </Layout.Sider>
-    )
+    if (history.location.pathname.indexOf('login') !== -1) {
+        return null
+    } else {
+        return (
+            <Layout.Sider collapsible collapsed={collapsed} onCollapse={(collapsed) => setCollapsed(collapsed)}>
+                <Menu
+                    mode="inline"
+                    selectedKeys={[keys[keys.length - 1].path]}
+                    style={{ height: '100%' }}
+                >
+                    {
+                        props.routerList.filter(item => item.showNav).map(item => {
+                            return (
+                                <Menu.Item key={item.path} icon={item.icon} onClick={() => history.push(item.path)}>{item.title}</Menu.Item>
+                            )
+                        })
+                    }
+                </Menu>
+            </Layout.Sider>
+        )
+    }
 }
 
 export default SideBar
